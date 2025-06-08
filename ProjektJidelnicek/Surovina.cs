@@ -48,5 +48,45 @@ namespace ProjektJidelnicek
                 Console.WriteLine(nazev);
             }
         }
+
+        public static List<Surovina> PrevedRetezecNaSuroviny(string retezec)
+        {
+            string[] suroviny = retezec.Split(',');
+            List<Surovina> seznamSurovin = [];
+            foreach (string surovina in suroviny)
+            {
+                string[] rozdelenaSurovina = surovina.Split('-');
+                Surovina novaSurovina = new(rozdelenaSurovina[0], int.Parse(rozdelenaSurovina[1]));
+                seznamSurovin.Add(novaSurovina);
+                if (!ZjistiJestliJeSurovinaVSeznamu(rozdelenaSurovina[0]))
+                {
+                    vsechno.Add(novaSurovina);
+                }
+            }
+            return seznamSurovin;
+        }
+
+        public static List<Surovina> RoztridSuroviny(List<string> suroviny)
+        {
+            List<Surovina> seznamSurovin = [];
+            foreach (string surovina in suroviny)
+            {
+                Surovina novaSurovina;
+                if (!ZjistiJestliJeSurovinaVSeznamu(surovina))
+                {
+                    Console.WriteLine($"Do jake skupiny surovin patri '{surovina}'?");
+                    kategorieSurovina.VypisKategorie();
+                    int cisloSuroviny = kategorieSurovina.NactiCisloKategorie();
+                    novaSurovina = new(surovina, cisloSuroviny);
+                    vsechno.Add(novaSurovina);
+                }
+                else
+                {
+                    novaSurovina = new(surovina, ZjistiCisloKategorie(surovina));
+                }
+                seznamSurovin.Add(novaSurovina);
+            }
+            return seznamSurovin;
+        }
     }
 }
