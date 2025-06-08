@@ -142,9 +142,11 @@ namespace ProjektJidelnicek
         public static void UlozJidloDoSouboru(Jidlo jidlo)
         // Metoda ulozi jidlo do souboru
         {
-            var surovinyPole = jidlo.SeznamSurovin.Select(x => String.Join('-',  x.Nazev ,x.Kategorie));
+            var surovinyPole = jidlo.SeznamSurovin.Select(x => String.Join('-', x.Nazev, x.Kategorie));
             var surovinyRetezec = String.Join(',', surovinyPole);
             File.AppendAllLines(soubor, [String.Join('|', jidlo.Nazev, jidlo.Kategorie, jidlo.MaPrilohu, surovinyRetezec)]);
         }
+
+        
     }
 }
