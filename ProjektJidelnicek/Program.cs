@@ -17,15 +17,16 @@ class Program
                     Recept.PridejRecept();
                     break;
                 case 2:
-                    // Jidlo.SmazJidlo();
-                    Console.WriteLine("Smazani jidla bude pridano");
+                    Surovina.VypisSuroviny();2
+                    Recept.SmazRecept();
+                    Surovina.VypisSuroviny();
                     break;
                 case 3:
                     // Jidlo.VyhledejJidlo();
                     Console.WriteLine("Vyhledani jidla bude pridano");
                     break;
                 case 4:
-                    // Jidlo.VypisJidla();
+                    // Jidlo.VypisJidla(); mozna staci vyhledavani, i tam se muze vyhledavat dle kategorii
                     Console.WriteLine("Vypsani jidel bude pridano");
                     break;
                 case 5:

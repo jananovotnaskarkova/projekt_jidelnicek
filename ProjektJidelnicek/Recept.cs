@@ -1,3 +1,5 @@
+using System.Security.Cryptography.X509Certificates;
+
 namespace ProjektJidelnicek
 {
     public class Recept
@@ -133,16 +135,54 @@ namespace ProjektJidelnicek
             File.AppendAllLines(soubor, [String.Join('|', recept.Nazev, recept.Kategorie, recept.MaPrilohu, surovinyRetezec)]);
         }
 
-        public static bool ZjistiJestliJeReceptVSeznamu(string nazevJidla)
+        public static bool ZjistiJestliJeReceptVSeznamu(string nazevReceptu)
         // Metoda zjisti, jestli uz je recept ulozene v seznamu
         {
-            return vsechno.Any(x => x.Nazev == nazevJidla);
+            return vsechno.Any(x => x.Nazev == nazevReceptu);
+        }
+
+        public static Recept NajdiJidlo(string nazevReceptu)
+        // Metoda vrati jidlo s danym nazvem
+        {
+            return vsechno.Where(x => x.Nazev == nazevReceptu).Select(x => x).ToList()[0];
         }
 
         public static Recept NajdiReceptDleNazvu(string nazevJidla)
         // Metoda najde recept v seznamu podle nazvu
         {
             return vsechno.Where(x => x.Nazev == nazevJidla).Select(x => x).ToList()[0];
+        }
+
+        public static void SmazRecept()
+        {
+            Console.WriteLine("Zadejte nazev jidla, ktere chcete smazat");
+            string vstup = Console.ReadLine();
+            Recept receptKeSmazani;
+
+            bool JeVSeznamu = ZjistiJestliJeReceptVSeznamu(vstup);
+            if (!JeVSeznamu)
+            {
+                Console.WriteLine("Nezname jidlo, neni mozne ho smazat");
+                return;
+            }
+
+            receptKeSmazani = NajdiReceptDleNazvu(vstup);
+            vsechno.Remove(receptKeSmazani);
+            File.WriteAllLines(soubor, [string.Empty]);
+            Surovina.vsechno = [];
+
+            // aktualizovany seznam jidel se znovu ulozi do souboru
+            foreach(Recept recept in vsechno)
+            {
+                UlozReceptDoSouboru(recept);
+                foreach(Surovina surovina in recept.SeznamSurovin)
+                {
+                    if (!Surovina.ZjistiJestliJeSurovinaVSeznamu(surovina.Nazev))
+                    {
+                        Surovina.vsechno.Add(surovina);
+                    }
+                }
+            }
         }
     }
 }
