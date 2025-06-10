@@ -15,13 +15,15 @@ namespace ProjektJidelnicek
         }
         public static List<Jidelnicek> vsechno = [];
 
+        public static string oddelovac = "------------------------------------------------------";
+
         public static void PridejJidlo()
         // Metoda se zepta na nazev jidla a prida ho do jidelnicku
         {
             Console.WriteLine("Zadejte nazev jidla, muzete vybirat z techto moznosti:");
-            Console.WriteLine("------------------------------------------------------");
-            Recept.VypisJidla(Recept.vsechno.Where(x => x.Kategorie != 4).Select(x => x).ToList());
-            Console.WriteLine("------------------------------------------------------");
+            Console.WriteLine(oddelovac);
+            Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie != 4).Select(x => x).ToList());
+            Console.WriteLine(oddelovac);
             string vstup = Console.ReadLine();
 
             if (!Recept.ZjistiJestliJeReceptVSeznamu(vstup))
@@ -34,9 +36,9 @@ namespace ProjektJidelnicek
             if (noveJidlo.MaPrilohu)
             {
                 Console.WriteLine("Zadejte nazev prilohy, muzete vybirat z techto moznosti:");
-                Console.WriteLine("--------------------------------------------------------");
-                Recept.VypisJidla(Recept.vsechno.Where(x => x.Kategorie == 4).Select(x => x).ToList());
-                Console.WriteLine("--------------------------------------------------------");
+                Console.WriteLine(oddelovac);
+                Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie == 4).Select(x => x).ToList());
+                Console.WriteLine(oddelovac);
                 string vstupPriloha = Console.ReadLine();
                 if (!Recept.ZjistiJestliJeReceptVSeznamu(vstup))
                 {
@@ -54,7 +56,7 @@ namespace ProjektJidelnicek
         public static void VypisInfo()
         {
             Console.WriteLine("Jidelnicek obsahuje tato jidla:");
-            Console.WriteLine("-------------------------------");
+            Console.WriteLine(oddelovac);
             foreach (Jidelnicek jidelnicek in vsechno)
             {
                 if (jidelnicek.Jidlo.MaPrilohu)
@@ -66,7 +68,7 @@ namespace ProjektJidelnicek
                     Console.WriteLine($"{jidelnicek.Jidlo.Nazev}");
                 }
             }
-            Console.WriteLine("-------------------------------");
+            Console.WriteLine(oddelovac);
         }
     }
 }

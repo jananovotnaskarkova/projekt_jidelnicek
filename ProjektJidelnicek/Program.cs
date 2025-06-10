@@ -4,7 +4,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        Recept.NactiJidlaZeSouboru();
+        Recept.NactiReceptyZeSouboru();
         Console.WriteLine("Vita vas program na planovani jidelnicku!");
 
         while (true)
@@ -17,9 +17,7 @@ class Program
                     Recept.PridejRecept();
                     break;
                 case 2:
-                    Surovina.VypisSuroviny();2
                     Recept.SmazRecept();
-                    Surovina.VypisSuroviny();
                     break;
                 case 3:
                     // Jidlo.VyhledejJidlo();
@@ -39,6 +37,8 @@ class Program
                 case 7:
                     Jidelnicek.VypisInfo();
                     break;
+                case 8:
+                    return;
             }
         }
     }
@@ -46,13 +46,14 @@ class Program
     // Slovnik obsahujici akce
     public static Dictionary<string, int> slovnikAkce = new Dictionary<string, int>
         {
-            { "pridat jidlo", 1},
-            { "smazat jidlo", 2},
-            { "vyhledat jidlo", 3},
-            { "vypsat jidla v kategorii", 4},
-            { "pridat jidlo do jidelnicku", 5},
+            { "pridat jidlo", 1 },
+            { "smazat jidlo", 2 },
+            { "vyhledat jidlo", 3 },
+            { "vypsat jidla v kategorii", 4 },
+            { "pridat jidlo do jidelnicku", 5 },
             { "odebrat jidlo z jidelnicku", 6 },
             { "vypsat info k jidelnicku", 7 },
+            { "ukoncit program", 8 }
         };
     private static Kategorie kategorieAkce = new Kategorie(slovnikAkce);
 }

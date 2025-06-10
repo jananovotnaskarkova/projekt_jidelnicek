@@ -17,19 +17,19 @@ namespace ProjektJidelnicek
             SeznamSurovin = seznam;
         }
 
-        // Seznam vsech jidel
+        // Seznam vsech receptu
         public static List<Recept> vsechno = [];
 
-        // Slovnik obsahujici kategorie jidel
+        // Slovnik obsahujici kategorie receptu
         private static Dictionary<string, int> slovnikRecept = new Dictionary<string, int>
         {
-            { "jidlo s masem", 1},
-            { "jidlo bez masa", 2},
-            { "sladke jidlo", 3},
+            { "recept s masem", 1},
+            { "recept bez masa", 2},
+            { "recept na sladke jidlo", 3},
             { "priloha", 4},
         };
 
-        // Kategorie jidel
+        // Kategorie receptu
         private static Kategorie kategorieRecept = new Kategorie(slovnikRecept);
 
         // Slovnik obsahujici kategorie priloh
@@ -42,11 +42,13 @@ namespace ProjektJidelnicek
         // Kategorie priloh
         private static Kategorie kategoriePriloha = new Kategorie(slovnikPriloha);
 
-        // Cesta k souboru se seznamem jidel
+        // Cesta k souboru se seznamem receptu
         private static string soubor = @"C:\C_Sharp\czechitas_jaro_25\projekt_jidelnicek\ProjektJidelnicek\seznam";
 
-        public static void NactiJidlaZeSouboru()
-        // Metoda nacte jidla ulozena v souboru
+        public static string oddelovac = "------------------------------------------------------";
+
+        public static void NactiReceptyZeSouboru()
+        // Metoda nacte recepty ulozene v souboru
         {
             string[] obsahSouboru = File.ReadAllLines(soubor);
             foreach (string radek in obsahSouboru)
@@ -63,7 +65,7 @@ namespace ProjektJidelnicek
             }
         }
 
-        public static (bool JePlatny, string nazevJidla, List<string> seznamSurovin) ZkontrolujVstup(string vstup)
+        public static (bool JePlatny, string nazevReceptu, List<string> seznamSurovin) ZkontrolujVstup(string vstup)
         //Metoda kontroluje vstup
         {
             bool jePlatny = false;
@@ -82,20 +84,20 @@ namespace ProjektJidelnicek
         }
 
         public static void PridejRecept()
-        // Metoda se zepta na nazev jidla a suroviny, zjisti do jake kategorie recept patri, jestli ma prilohu a roztridi suroviny do kategorii
+        // Metoda se zepta na nazev receptu a suroviny, zjisti do jake kategorie recept patri, jestli ma prilohu a roztridi suroviny do kategorii
         {
-            Console.WriteLine("Zadejte nove jidlo ve formatu: 'nazev,surovina1,surovina2,surovina3,surovina4,surovina5'");
+            Console.WriteLine("Zadejte novy recept ve formatu: 'nazev,surovina1,surovina2,surovina3,surovina4,surovina5'");
             string vstup = Console.ReadLine();
             bool maPrilohu;
 
-            (bool JePlatny, string nazevJidla, List<string> suroviny) = ZkontrolujVstup(vstup);
+            (bool JePlatny, string nazevReceptu, List<string> suroviny) = ZkontrolujVstup(vstup);
             if (!JePlatny)
             {
-                Console.WriteLine("Jidlo nema vhodny format");
+                Console.WriteLine("Recept nema vhodny format");
                 return;
             }
 
-            Console.WriteLine($"Do jake skupiny jidel patri '{nazevJidla}'?");
+            Console.WriteLine($"Do jake skupiny receptu patri '{nazevReceptu}'?");
             kategorieRecept.VypisKategorie();
             int cisloKategorie = kategorieRecept.NactiCisloKategorie();
 
@@ -105,7 +107,7 @@ namespace ProjektJidelnicek
             }
             else
             {
-                Console.WriteLine($"Ma jidlo '{nazevJidla}' prilohu?");
+                Console.WriteLine($"Ma recept '{nazevReceptu}' prilohu?");
                 kategoriePriloha.VypisKategorie();
                 int cisloPrilohy = kategoriePriloha.NactiCisloKategorie();
                 maPrilohu = cisloPrilohy.Equals(1);
@@ -113,13 +115,13 @@ namespace ProjektJidelnicek
 
             List<Surovina> seznamSurovin = Surovina.RoztridSuroviny(suroviny);
 
-            Recept novyRecept = new(nazevJidla, cisloKategorie, maPrilohu, seznamSurovin);
+            Recept novyRecept = new(nazevReceptu, cisloKategorie, maPrilohu, seznamSurovin);
             vsechno.Add(novyRecept);
-            UlozReceptDoSouboru(novyRecept);
+            File.AppendAllLines(soubor, [prevedeReceptNaRetezec(novyRecept)]);
         }
 
-        public static void VypisJidla(List<Recept> seznam)
-        // Metoda vypise nazvy jidel na seznamu
+        public static void VypisRecepty(List<Recept> seznam)
+        // Metoda vypise nazvy receptu na seznamu
         {
             foreach (string nazev in seznam.Select(x => x.Nazev))
             {
@@ -127,12 +129,12 @@ namespace ProjektJidelnicek
             }
         }
 
-        public static void UlozReceptDoSouboru(Recept recept)
+        public static string prevedeReceptNaRetezec(Recept recept)
         // Metoda ulozi recept do souboru
         {
             var surovinyPole = recept.SeznamSurovin.Select(x => String.Join('-', x.Nazev, x.Kategorie));
             var surovinyRetezec = String.Join(',', surovinyPole);
-            File.AppendAllLines(soubor, [String.Join('|', recept.Nazev, recept.Kategorie, recept.MaPrilohu, surovinyRetezec)]);
+            return String.Join('|', recept.Nazev, recept.Kategorie, recept.MaPrilohu, surovinyRetezec);
         }
 
         public static bool ZjistiJestliJeReceptVSeznamu(string nazevReceptu)
@@ -141,41 +143,49 @@ namespace ProjektJidelnicek
             return vsechno.Any(x => x.Nazev == nazevReceptu);
         }
 
-        public static Recept NajdiJidlo(string nazevReceptu)
-        // Metoda vrati jidlo s danym nazvem
+        public static Recept NajdiRecept(string nazevReceptu)
+        // Metoda vrati recept s danym nazvem
         {
             return vsechno.Where(x => x.Nazev == nazevReceptu).Select(x => x).ToList()[0];
         }
 
-        public static Recept NajdiReceptDleNazvu(string nazevJidla)
+        public static Recept NajdiReceptDleNazvu(string nazevReceptu)
         // Metoda najde recept v seznamu podle nazvu
         {
-            return vsechno.Where(x => x.Nazev == nazevJidla).Select(x => x).ToList()[0];
+            return vsechno.Where(x => x.Nazev == nazevReceptu).Select(x => x).ToList()[0];
         }
 
         public static void SmazRecept()
         {
-            Console.WriteLine("Zadejte nazev jidla, ktere chcete smazat");
+            Console.WriteLine("Zadejte nazev receptu, ktere chcete smazat, muzete vybirat z techto moznosti:");
+            Console.WriteLine(oddelovac);
+            Recept.VypisRecepty(Recept.vsechno);
+            Console.WriteLine("------------------------------------------------------");
             string vstup = Console.ReadLine();
             Recept receptKeSmazani;
 
             bool JeVSeznamu = ZjistiJestliJeReceptVSeznamu(vstup);
             if (!JeVSeznamu)
             {
-                Console.WriteLine("Nezname jidlo, neni mozne ho smazat");
+                Console.WriteLine("Neznamy recept, neni mozne ho smazat");
                 return;
             }
 
             receptKeSmazani = NajdiReceptDleNazvu(vstup);
             vsechno.Remove(receptKeSmazani);
-            File.WriteAllLines(soubor, [string.Empty]);
+
+            // soubor s recepty se vymaze
+            File.WriteAllText(soubor, string.Empty);
+            // seznam surovin se vymaze
             Surovina.vsechno = [];
 
-            // aktualizovany seznam jidel se znovu ulozi do souboru
-            foreach(Recept recept in vsechno)
+            // recepty na seznamu se znovu ulozi do souboru a znovu se vytvori seznam surovin
+            foreach (Recept recept in vsechno)
             {
-                UlozReceptDoSouboru(recept);
-                foreach(Surovina surovina in recept.SeznamSurovin)
+                prevedeReceptNaRetezec(recept);
+                File.AppendAllText(soubor, prevedeReceptNaRetezec(recept) + Environment.NewLine);
+
+                foreach (Surovina surovina in recept.SeznamSurovin)
                 {
                     if (!Surovina.ZjistiJestliJeSurovinaVSeznamu(surovina.Nazev))
                     {
@@ -183,6 +193,8 @@ namespace ProjektJidelnicek
                     }
                 }
             }
+
+            Console.WriteLine($"Recept '{vstup}' byl smazan");
         }
     }
 }
