@@ -20,24 +20,19 @@ class Program
                     Recept.SmazRecept();
                     break;
                 case 3:
-                    // Jidlo.VyhledejJidlo();
-                    Console.WriteLine("Vyhledani jidla bude pridano");
+                    Recept.VyhledejRecept();
                     break;
                 case 4:
-                    // Jidlo.VypisJidla(); mozna staci vyhledavani, i tam se muze vyhledavat dle kategorii
-                    Console.WriteLine("Vypsani jidel bude pridano");
+                    Jidlo.PridejJidlo();
                     break;
                 case 5:
-                    Jidelnicek.PridejJidlo();
-                    break;
-                case 6:
                     // Jidelnicek.SmazJidlo();
                     Console.WriteLine("Smazani jidla z jidelnicku bude pridano");
                     break;
-                case 7:
-                    Jidelnicek.VypisInfo();
+                case 6:
+                    Jidlo.VypisInfo();
                     break;
-                case 8:
+                case 7:
                     return;
             }
         }
@@ -46,14 +41,13 @@ class Program
     // Slovnik obsahujici akce
     public static Dictionary<string, int> slovnikAkce = new Dictionary<string, int>
         {
-            { "pridat jidlo", 1 },
-            { "smazat jidlo", 2 },
-            { "vyhledat jidlo", 3 },
-            { "vypsat jidla v kategorii", 4 },
-            { "pridat jidlo do jidelnicku", 5 },
-            { "odebrat jidlo z jidelnicku", 6 },
-            { "vypsat info k jidelnicku", 7 },
-            { "ukoncit program", 8 }
+            { "pridat recept", 1 },
+            { "smazat recept", 2 },
+            { "vyhledat recept", 3 },
+            { "pridat jidlo do jidelnicku", 4 },
+            { "odebrat jidlo z jidelnicku", 5 },
+            { "vypsat info k jidelnicku", 6 },
+            { "ukoncit program", 7 }
         };
     private static Kategorie kategorieAkce = new Kategorie(slovnikAkce);
 }

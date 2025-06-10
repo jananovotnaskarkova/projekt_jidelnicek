@@ -1,19 +1,19 @@
 namespace ProjektJidelnicek
 {
-    public class Jidelnicek
+    public class Jidlo
     {
-        public Recept Jidlo;
+        public Recept SamotneJidlo;
         public Recept Priloha;
-        public Jidelnicek(Recept jidlo)
+        public Jidlo(Recept samotneJidlo)
         {
-            Jidlo = jidlo;
+            SamotneJidlo = samotneJidlo;
         }
-        public Jidelnicek(Recept jidlo, Recept priloha)
+        public Jidlo(Recept samotneJidlo, Recept priloha)
         {
-            Jidlo = jidlo;
+            SamotneJidlo = samotneJidlo;
             Priloha = priloha;
         }
-        public static List<Jidelnicek> vsechno = [];
+        public static List<Jidlo> jidelnicek = [];
 
         public static string oddelovac = "------------------------------------------------------";
 
@@ -21,9 +21,7 @@ namespace ProjektJidelnicek
         // Metoda se zepta na nazev jidla a prida ho do jidelnicku
         {
             Console.WriteLine("Zadejte nazev jidla, muzete vybirat z techto moznosti:");
-            Console.WriteLine(oddelovac);
             Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie != 4).Select(x => x).ToList());
-            Console.WriteLine(oddelovac);
             string vstup = Console.ReadLine();
 
             if (!Recept.ZjistiJestliJeReceptVSeznamu(vstup))
@@ -36,20 +34,18 @@ namespace ProjektJidelnicek
             if (noveJidlo.MaPrilohu)
             {
                 Console.WriteLine("Zadejte nazev prilohy, muzete vybirat z techto moznosti:");
-                Console.WriteLine(oddelovac);
                 Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie == 4).Select(x => x).ToList());
-                Console.WriteLine(oddelovac);
                 string vstupPriloha = Console.ReadLine();
                 if (!Recept.ZjistiJestliJeReceptVSeznamu(vstup))
                 {
                     Console.WriteLine("Nezname priloha, jidlo s prilohou nebylo pridano");
                     return;
                 }
-                vsechno.Add(new Jidelnicek(noveJidlo, Recept.NajdiReceptDleNazvu(vstupPriloha)));
+                jidelnicek.Add(new Jidlo(noveJidlo, Recept.NajdiReceptDleNazvu(vstupPriloha)));
             }
             else
             {
-                vsechno.Add(new Jidelnicek(noveJidlo));
+                jidelnicek.Add(new Jidlo(noveJidlo));
             }
         }
 
@@ -57,15 +53,15 @@ namespace ProjektJidelnicek
         {
             Console.WriteLine("Jidelnicek obsahuje tato jidla:");
             Console.WriteLine(oddelovac);
-            foreach (Jidelnicek jidelnicek in vsechno)
+            foreach (Jidlo jidlo in jidelnicek)
             {
-                if (jidelnicek.Jidlo.MaPrilohu)
+                if (jidlo.SamotneJidlo.MaPrilohu)
                 {
-                    Console.WriteLine($"{jidelnicek.Jidlo.Nazev} & {jidelnicek.Priloha.Nazev}");
+                    Console.WriteLine($"{jidlo.SamotneJidlo.Nazev} & {jidlo.Priloha.Nazev}");
                 }
                 else
                 {
-                    Console.WriteLine($"{jidelnicek.Jidlo.Nazev}");
+                    Console.WriteLine($"{jidlo.SamotneJidlo.Nazev}");
                 }
             }
             Console.WriteLine(oddelovac);

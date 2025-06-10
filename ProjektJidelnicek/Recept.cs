@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 
 namespace ProjektJidelnicek
@@ -41,6 +42,17 @@ namespace ProjektJidelnicek
 
         // Kategorie priloh
         private static Kategorie kategoriePriloha = new Kategorie(slovnikPriloha);
+
+        // Slovnik obsahujici moznosti vyhledavani
+        private static Dictionary<string, int> slovnikVyhledavani = new Dictionary<string, int>
+        {
+            { "vyhledat podle nazvu", 1 },
+            { "vyhledat podle surovin", 2 },
+            { "vyhledat podle kategorie", 3},
+        };
+
+        // Kategorie priloh
+        private static Kategorie kategorieVyhledavani = new Kategorie(slovnikVyhledavani);
 
         // Cesta k souboru se seznamem receptu
         private static string soubor = @"C:\C_Sharp\czechitas_jaro_25\projekt_jidelnicek\ProjektJidelnicek\seznam";
@@ -123,10 +135,16 @@ namespace ProjektJidelnicek
         public static void VypisRecepty(List<Recept> seznam)
         // Metoda vypise nazvy receptu na seznamu
         {
-            foreach (string nazev in seznam.Select(x => x.Nazev))
+            Console.WriteLine(oddelovac);
+            if (seznam.Count == 0)
             {
-                Console.WriteLine(nazev);
+                Console.WriteLine("Recepty odpovidajici zadanym kriteriim nenalezeny");
             }
+            foreach (string nazev in seznam.Select(x => x.Nazev))
+                {
+                    Console.WriteLine(nazev);
+                }
+            Console.WriteLine(oddelovac);
         }
 
         public static string prevedeReceptNaRetezec(Recept recept)
@@ -155,12 +173,37 @@ namespace ProjektJidelnicek
             return vsechno.Where(x => x.Nazev == nazevReceptu).Select(x => x).ToList()[0];
         }
 
+        public static void VyhledejRecept()
+        {
+            Console.WriteLine("Podle ceho chcete recepty vyhledat?");
+            kategorieVyhledavani.VypisKategorie();
+            int vyhledavani = kategorieVyhledavani.NactiCisloKategorie();
+            string vstup;
+
+            switch (vyhledavani)
+            {
+                case 1:
+                    Console.WriteLine("Zadejte cast nazvu receptu pro vyhledavani:");
+                    vstup = Console.ReadLine();
+                    VypisRecepty(vsechno.Where(x => x.Nazev.Contains(vstup)).Select(x => x).ToList());
+                    break;
+                case 2:
+                    Console.WriteLine("Zadejte surovinu pro vyhledavani:");
+                    vstup = Console.ReadLine();
+                    VypisRecepty(vsechno.Where(x => x.SeznamSurovin.Any(x => x.Nazev.Contains(vstup))).Select(x => x).ToList());
+                    break;
+                case 3:
+                    kategorieRecept.VypisKategorie();
+                    int cislo = kategorieRecept.NactiCisloKategorie();
+                    VypisRecepty(vsechno.Where(x => x.Kategorie == cislo).Select(x => x).ToList());
+                    break;
+            }
+        }
+
         public static void SmazRecept()
         {
             Console.WriteLine("Zadejte nazev receptu, ktere chcete smazat, muzete vybirat z techto moznosti:");
-            Console.WriteLine(oddelovac);
             Recept.VypisRecepty(Recept.vsechno);
-            Console.WriteLine("------------------------------------------------------");
             string vstup = Console.ReadLine();
             Recept receptKeSmazani;
 
