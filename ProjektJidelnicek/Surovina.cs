@@ -40,13 +40,18 @@ namespace ProjektJidelnicek
             return vsechno.Where(x => x.Nazev == surovina).Select(x => x.Kategorie).ToList()[0];
         }
 
-        public static void VypisSuroviny()
-        // Metoda vypise suroviny na seznamu
+        public static void VypisSurovinyDleKategorie()
+        // Metoda vypise suroviny dle kategorie
         {
-            foreach (string nazev in vsechno.Select(x => x.Nazev))
+            Console.WriteLine("Zadejte cislo kategorie:");
+            kategorieSurovina.VypisKategorie();
+            int cislo = kategorieSurovina.NactiCisloKategorie();
+            Console.WriteLine(Recept.oddelovac);
+            foreach (string nazev in vsechno.Where(x => x.Kategorie == cislo).Select(x => x.Nazev))
             {
                 Console.WriteLine(nazev);
             }
+            Console.WriteLine(Recept.oddelovac);
         }
 
         public static List<Surovina> PrevedRetezecNaSuroviny(string retezec)

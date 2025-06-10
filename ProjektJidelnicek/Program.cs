@@ -14,25 +14,28 @@ class Program
             switch (cisloAkce)
             {
                 case 1:
-                    Recept.PridejRecept();
+                    Surovina.VypisSurovinyDleKategorie();
                     break;
                 case 2:
-                    Recept.SmazRecept();
+                    Recept.PridejRecept();
                     break;
                 case 3:
-                    Recept.VyhledejRecept();
+                    Recept.SmazRecept();
                     break;
                 case 4:
-                    Jidlo.PridejJidlo();
+                    Recept.VyhledejRecept();
                     break;
                 case 5:
+                    Jidlo.PridejJidlo();
+                    break;
+                case 6:
                     // Jidelnicek.SmazJidlo();
                     Console.WriteLine("Smazani jidla z jidelnicku bude pridano");
                     break;
-                case 6:
+                case 7:
                     Jidlo.VypisInfo();
                     break;
-                case 7:
+                case 8:
                     return;
             }
         }
@@ -41,13 +44,14 @@ class Program
     // Slovnik obsahujici akce
     public static Dictionary<string, int> slovnikAkce = new Dictionary<string, int>
         {
-            { "pridat recept", 1 },
-            { "smazat recept", 2 },
-            { "vyhledat recept", 3 },
-            { "pridat jidlo do jidelnicku", 4 },
-            { "odebrat jidlo z jidelnicku", 5 },
-            { "vypsat info k jidelnicku", 6 },
-            { "ukoncit program", 7 }
+            { "vypsat suroviny dle kategorie", 1 },
+            { "pridat recept", 2 },
+            { "smazat recept", 3 },
+            { "vyhledat recept", 4 },
+            { "pridat jidlo do jidelnicku", 5 },
+            { "odebrat jidlo z jidelnicku", 6 },
+            { "vypsat info k jidelnicku", 7 },
+            { "ukoncit program", 8 }
         };
     private static Kategorie kategorieAkce = new Kategorie(slovnikAkce);
 }

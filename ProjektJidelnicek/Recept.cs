@@ -28,6 +28,7 @@ namespace ProjektJidelnicek
             { "recept bez masa", 2},
             { "recept na sladke jidlo", 3},
             { "priloha", 4},
+            { "recept na peceni", 5 }
         };
 
         // Kategorie receptu
@@ -113,7 +114,7 @@ namespace ProjektJidelnicek
             kategorieRecept.VypisKategorie();
             int cisloKategorie = kategorieRecept.NactiCisloKategorie();
 
-            if (cisloKategorie == 4)
+            if ((cisloKategorie == 4) ^ (cisloKategorie == 5))
             {
                 maPrilohu = false;
             }
@@ -129,7 +130,7 @@ namespace ProjektJidelnicek
 
             Recept novyRecept = new(nazevReceptu, cisloKategorie, maPrilohu, seznamSurovin);
             vsechno.Add(novyRecept);
-            File.AppendAllLines(soubor, [prevedeReceptNaRetezec(novyRecept)]);
+            File.AppendAllLines(soubor, [PrevedReceptNaRetezec(novyRecept)]);
         }
 
         public static void VypisRecepty(List<Recept> seznam)
@@ -147,7 +148,7 @@ namespace ProjektJidelnicek
             Console.WriteLine(oddelovac);
         }
 
-        public static string prevedeReceptNaRetezec(Recept recept)
+        public static string PrevedReceptNaRetezec(Recept recept)
         // Metoda ulozi recept do souboru
         {
             var surovinyPole = recept.SeznamSurovin.Select(x => String.Join('-', x.Nazev, x.Kategorie));
@@ -190,6 +191,11 @@ namespace ProjektJidelnicek
                 case 2:
                     Console.WriteLine("Zadejte surovinu pro vyhledavani:");
                     vstup = Console.ReadLine();
+                    string surovinyDleVstupu = String.Join(", ", Surovina.vsechno.Where(x => x.Nazev.Contains(vstup)).Select(x => x.Nazev).ToList());
+                    if (surovinyDleVstupu.Length != 0)
+                    {
+                        Console.WriteLine($"Recepty obsahujici suroviny: {surovinyDleVstupu}");
+                    }
                     VypisRecepty(vsechno.Where(x => x.SeznamSurovin.Any(x => x.Nazev.Contains(vstup))).Select(x => x).ToList());
                     break;
                 case 3:
@@ -225,8 +231,8 @@ namespace ProjektJidelnicek
             // recepty na seznamu se znovu ulozi do souboru a znovu se vytvori seznam surovin
             foreach (Recept recept in vsechno)
             {
-                prevedeReceptNaRetezec(recept);
-                File.AppendAllText(soubor, prevedeReceptNaRetezec(recept) + Environment.NewLine);
+                PrevedReceptNaRetezec(recept);
+                File.AppendAllText(soubor, PrevedReceptNaRetezec(recept) + Environment.NewLine);
 
                 foreach (Surovina surovina in recept.SeznamSurovin)
                 {
