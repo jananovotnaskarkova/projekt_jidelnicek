@@ -18,15 +18,19 @@ namespace ProjektJidelnicek
         private static Dictionary<string, int> slovnikSurovina = new Dictionary<string, int>
         {
             { "maso", 1 },
-            { "mleko", 2 },
+            { "mleko a vejce", 2 },
             { "obiloviny", 3 },
             { "zelenina", 4 },
             { "ovoce", 5 },
             { "lusteniny", 6 },
             { "koreni", 7 },
-            { "ostatni", 8 }
+            { "suche plody", 8 },
+            { "ostatni", 9 },
+            { "vyrobky", 10 },
         };
         public static Kategorie kategorieSurovina = new Kategorie(slovnikSurovina);
+
+        public static string oddelovac = "------------------------------------------------------";
 
         public static bool ZjistiJestliJeSurovinaVSeznamu(string surovina)
         // Metoda zjisti, jestli uz je surovina ulozena v seznamu
@@ -46,12 +50,22 @@ namespace ProjektJidelnicek
             Console.WriteLine("Zadejte cislo kategorie:");
             kategorieSurovina.VypisKategorie();
             int cislo = kategorieSurovina.NactiCisloKategorie();
-            Console.WriteLine(Recept.oddelovac);
-            foreach (string nazev in vsechno.Where(x => x.Kategorie == cislo).Select(x => x.Nazev))
+            VypisSuroviny(vsechno.Where(x => x.Kategorie == cislo).Select(x => x).ToList());
+        }
+
+        public static void VypisSuroviny(List<Surovina> seznam)
+        // Metoda vypise nazvy surovin na seznamu
+        {
+            Console.WriteLine(oddelovac);
+            if (seznam.Count == 0)
             {
-                Console.WriteLine(nazev);
+                Console.WriteLine("Suroviny odpovidajici zadanym kriteriim nenalezeny");
             }
-            Console.WriteLine(Recept.oddelovac);
+            foreach (string nazev in seznam.Select(x => x.Nazev))
+                {
+                    Console.WriteLine(nazev);
+                }
+            Console.WriteLine(oddelovac);
         }
 
         public static List<Surovina> PrevedRetezecNaSuroviny(string retezec)
