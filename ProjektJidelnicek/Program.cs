@@ -9,6 +9,7 @@ class Program
 
         while (true)
         {
+            Console.WriteLine("******************************************************");
             kategorieAkce.VypisKategorie();
             int cisloAkce = kategorieAkce.NactiCisloKategorie();
             switch (cisloAkce)
@@ -17,40 +18,44 @@ class Program
                     Surovina.VypisSurovinyDleKategorie();
                     break;
                 case 2:
-                    Recept.PridejRecept();
+                    Recept.VypisSurovinyUReceptu();
                     break;
                 case 3:
-                    Recept.SmazRecept();
-                    break;
-                case 4:
                     Recept.VyhledejRecept();
                     break;
+                case 4:
+                    Recept.PridejRecept();
+                    break;
                 case 5:
-                    Jidlo.PridejJidlo();
+                    Recept.SmazRecept();
                     break;
                 case 6:
-                    Jidlo.SmazJidlo();
+                    Jidlo.PridejJidlo();
                     break;
                 case 7:
-                    Jidlo.VypisInfo();
+                    Jidlo.SmazJidlo();
                     break;
                 case 8:
+                    Jidlo.VypisInfo();
+                    break;
+                case 9:
                     return;
             }
         }
     }
 
     // Slovnik obsahujici akce
-    public static Dictionary<string, int> slovnikAkce = new Dictionary<string, int>
+    private static Dictionary<string, int> slovnikAkce = new Dictionary<string, int>
         {
             { "vypsat suroviny dle kategorie", 1 },
-            { "pridat recept", 2 },
-            { "smazat recept", 3 },
-            { "vyhledat recept", 4 },
-            { "pridat jidlo do jidelnicku", 5 },
-            { "odebrat jidlo z jidelnicku", 6 },
-            { "vypsat info k jidelnicku", 7 },
-            { "ukoncit program", 8 }
+            { "vypsat suroviny u receptu", 2 },
+            { "vyhledat recept", 3 },
+            { "pridat recept", 4 },
+            { "smazat recept", 5 },
+            { "pridat jidlo do jidelnicku", 6 },
+            { "smazat jidlo z jidelnicku", 7 },
+            { "vypsat info k jidelnicku", 8 },
+            { "ukoncit program", 9 }
         };
     private static Kategorie kategorieAkce = new Kategorie(slovnikAkce);
 }

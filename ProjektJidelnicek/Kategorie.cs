@@ -38,7 +38,7 @@ namespace ProjektJidelnicek
         // Metoda vypise kategorie ve forme menu (cislo: nazev kategorie)
         public void VypisKategorie()
         {
-            Console.WriteLine("Napis cislo pro jednu z nasledujich moznosti:");
+            Console.WriteLine("Napiste cislo pro jednu z nasledujich moznosti:");
             string vystup = "";
             foreach (var s in Slovnik)
             {

@@ -11,10 +11,10 @@ namespace ProjektJidelnicek
             Kategorie = kategorie;
         }
 
-        // Seznam vsech jidel
+        // Seznam vsech surovin
         public static List<Surovina> vsechno = [];
 
-        // Slovnik obsahujici vsechny kategorie surovin
+        // Slovnik obsahujici kategorie surovin
         private static Dictionary<string, int> slovnikSurovina = new Dictionary<string, int>
         {
             { "maso", 1 },
@@ -28,6 +28,8 @@ namespace ProjektJidelnicek
             { "ostatni", 9 },
             { "vyrobky", 10 },
         };
+
+        // Kategorie surovin
         public static Kategorie kategorieSurovina = new Kategorie(slovnikSurovina);
 
         public static string oddelovac = "------------------------------------------------------";
@@ -39,7 +41,7 @@ namespace ProjektJidelnicek
         }
 
         public static int ZjistiCisloKategorie(string surovina)
-        // Metoda zjisti do jake kategorie surovina patrid
+        // Metoda zjisti, do jake kategorie surovina patri
         {
             return vsechno.Where(x => x.Nazev == surovina).Select(x => x.Kategorie).ToList()[0];
         }
@@ -47,36 +49,40 @@ namespace ProjektJidelnicek
         public static void VypisSurovinyDleKategorie()
         // Metoda vypise suroviny dle kategorie
         {
-            Console.WriteLine("Zadejte cislo kategorie:");
             kategorieSurovina.VypisKategorie();
             int cislo = kategorieSurovina.NactiCisloKategorie();
             VypisSuroviny(vsechno.Where(x => x.Kategorie == cislo).Select(x => x).ToList());
         }
 
         public static void VypisSuroviny(List<Surovina> seznam)
-        // Metoda vypise nazvy surovin na seznamu
+        // Metoda vypise nazvy surovin na zadanem seznamu
         {
             Console.WriteLine(oddelovac);
             if (seznam.Count == 0)
             {
                 Console.WriteLine("Suroviny odpovidajici zadanym kriteriim nenalezeny");
             }
+
             foreach (string nazev in seznam.Select(x => x.Nazev))
-                {
-                    Console.WriteLine(nazev);
-                }
+            {
+                Console.WriteLine(nazev);
+            }
             Console.WriteLine(oddelovac);
         }
 
         public static List<Surovina> PrevedRetezecNaSuroviny(string retezec)
+        // Metoda prevede retezec obsahujici udaje o surovinach na seznam surovin
+        // Ulozi surovinu na seznam vsech surovin, pokud tam jeste surovina neni
         {
             string[] suroviny = retezec.Split(',');
             List<Surovina> seznamSurovin = [];
+
             foreach (string surovina in suroviny)
             {
                 string[] rozdelenaSurovina = surovina.Split('-');
                 Surovina novaSurovina = new(rozdelenaSurovina[0], int.Parse(rozdelenaSurovina[1]));
                 seznamSurovin.Add(novaSurovina);
+
                 if (!ZjistiJestliJeSurovinaVSeznamu(rozdelenaSurovina[0]))
                 {
                     vsechno.Add(novaSurovina);
@@ -86,8 +92,12 @@ namespace ProjektJidelnicek
         }
 
         public static List<Surovina> RoztridSuroviny(List<string> suroviny)
+        // Metoda roztridi suroviny u zadaneho receptu
+        // Pokud uz je surovina na seznamu vsech surovin, tak najde cislo kategorie
+        // Pokud surovina jeste neni na seznamu vsech surovin, tak se uzivatele zepta, do jake kategorie patri
         {
             List<Surovina> seznamSurovin = [];
+
             foreach (string surovina in suroviny)
             {
                 Surovina novaSurovina;

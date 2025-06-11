@@ -4,8 +4,8 @@ namespace ProjektJidelnicek
 {
     public class Jidlo
     {
-        public Recept SamotneJidlo;
-        public Recept Priloha;
+        public Recept SamotneJidlo { get; }
+        public Recept Priloha { get; }
         public Jidlo(Recept samotneJidlo)
         {
             SamotneJidlo = samotneJidlo;
@@ -49,11 +49,18 @@ namespace ProjektJidelnicek
             {
                 jidelnicek.Add(new Jidlo(noveJidlo));
             }
+            Console.WriteLine($"Jidlo '{noveJidlo.Nazev}' bylo pridano do jidelnicku");
         }
 
         public static void SmazJidlo()
         // Metoda se zepta na nazev jidla a smaze ho z jidelnicku
         {
+            if (jidelnicek.Count == 0)
+            {
+                Console.WriteLine("Jidelnik neobsahuje zadna jidla");
+                return;
+            }
+
             Console.WriteLine("Zadejte nazev jidla, ktere chcete smazat. Muzete vybirat z techto moznosti:");
             VypisJidlaNaJidelnicku();
             string vstup = Console.ReadLine();
@@ -66,7 +73,7 @@ namespace ProjektJidelnicek
 
             Jidlo jidloKeSmazani = NajdiJidloDleNazvu(vstup);
             jidelnicek.Remove(jidloKeSmazani);
-            Console.WriteLine("Jidlo bylo smazano.");
+            Console.WriteLine($"Jidlo '{jidloKeSmazani.SamotneJidlo.Nazev}' bylo smazano z jidelnicku");
         }
 
         public static void VypisJidlaNaJidelnicku()
@@ -102,8 +109,27 @@ namespace ProjektJidelnicek
         public static void VypisInfo()
         // Metoda vypise informace o jidelnicku
         {
+            if (jidelnicek.Count == 0)
+            {
+                Console.WriteLine("Jidelnik neobsahuje zadna jidla");
+                return;
+            }
+
             Console.WriteLine("Jidelnicek obsahuje tato jidla:");
             VypisJidlaNaJidelnicku();
+            Console.WriteLine($"Pocet jidel s masem: {jidelnicek.Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept s masem"])
+                                                                .Select(x => x).Count()}");
+            Console.WriteLine($"Pocet jidel bez masa: {jidelnicek.Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept bez masa"])
+                                                                 .Select(x => x).Count()}");
+            Console.WriteLine($"Pocet sladkych jidel: {jidelnicek.Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept na sladke jidlo"])
+                                                                 .Select(x => x).Count()}");
+            Console.WriteLine($"Pocet receptu na peceni: {jidelnicek.Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept na peceni"])
+                                                                    .Select(x => x).Count()}");
+            Console.WriteLine(oddelovac);
+            string druhyZeleniny = String.Join(", ", jidelnicek.SelectMany(x => x.SamotneJidlo.SeznamSurovin.Where(x => x.Kategorie == 4)).Select(x => x.Nazev).Distinct());
+            Console.WriteLine($"Jidelnicek obsahuje tyto druhy zeleniny: {druhyZeleniny}");
+            Console.WriteLine(oddelovac);
+            // Pridat moznost ulozit si nakupni seznam do souboru
         }
     }
 }
