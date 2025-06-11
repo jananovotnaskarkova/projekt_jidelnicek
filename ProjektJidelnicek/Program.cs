@@ -39,6 +39,7 @@ class Program
                     Jidlo.VypisInfo();
                     break;
                 case 9:
+                    Console.WriteLine("Nashledanou!");
                     return;
             }
         }

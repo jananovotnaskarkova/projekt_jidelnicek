@@ -21,6 +21,7 @@ namespace ProjektJidelnicek
 
         public static void PridejJidlo()
         // Metoda se zepta na nazev jidla a prida ho do jidelnicku
+        // Pokud ma jidlo prilohu, zepta se i na ni a prida ji
         {
             Console.WriteLine("Zadejte nazev jidla, ktere chcete pridat. Muzete vybirat z techto moznosti:");
             Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie != 4).Select(x => x).ToList());
@@ -129,6 +130,7 @@ namespace ProjektJidelnicek
             string druhyZeleniny = String.Join(", ", jidelnicek.SelectMany(x => x.SamotneJidlo.SeznamSurovin.Where(x => x.Kategorie == 4)).Select(x => x.Nazev).Distinct());
             Console.WriteLine($"Jidelnicek obsahuje tyto druhy zeleniny: {druhyZeleniny}");
             Console.WriteLine(oddelovac);
+
             // Pridat moznost ulozit si nakupni seznam do souboru
         }
     }
