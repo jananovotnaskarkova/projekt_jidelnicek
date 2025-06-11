@@ -157,7 +157,7 @@ namespace ProjektJidelnicek
         }
 
         public static bool ZjistiJestliJeReceptVSeznamu(string nazevReceptu)
-        // Metoda zjisti, jestli uz je recept ulozene v seznamu
+        // Metoda zjisti, jestli uz je recept ulozeny v seznamu
         {
             return vsechno.Any(x => x.Nazev == nazevReceptu);
         }

@@ -29,8 +29,7 @@ class Program
                     Jidlo.PridejJidlo();
                     break;
                 case 6:
-                    // Jidelnicek.SmazJidlo();
-                    Console.WriteLine("Smazani jidla z jidelnicku bude pridano");
+                    Jidlo.SmazJidlo();
                     break;
                 case 7:
                     Jidlo.VypisInfo();
