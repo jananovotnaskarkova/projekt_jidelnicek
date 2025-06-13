@@ -2,8 +2,8 @@ namespace ProjektJidelnicek
 {
     public class Surovina
     {
-        public string Nazev { get; }
-        public int Kategorie { get; }
+        public string Nazev { get; private set; }
+        public int Kategorie { get; private set; }
 
         public Surovina(string nazev, int kategorie)
         {

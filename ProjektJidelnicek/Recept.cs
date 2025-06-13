@@ -2,10 +2,10 @@ namespace ProjektJidelnicek
 {
     public class Recept
     {
-        public string Nazev { get; }
-        public int Kategorie { get; }
-        public bool MaPrilohu { get; }
-        public List<Surovina> SeznamSurovin { get; }
+        public string Nazev { get; private set; }
+        public int Kategorie { get; private set; }
+        public bool MaPrilohu { get; private set; }
+        public List<Surovina> SeznamSurovin { get; private set; }
 
         public Recept(string nazev, int kategorie, bool maPrilohu, List<Surovina> seznam)
         {
