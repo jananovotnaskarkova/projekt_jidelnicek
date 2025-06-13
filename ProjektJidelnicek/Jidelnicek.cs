@@ -112,7 +112,7 @@ namespace ProjektJidelnicek
         }
 
         public static void VypisPocetJidelDleKategorii()
-        // Vypise pocet jidel v jednotlivych kategoriich
+        // Metoda vypise pocet jidel v jednotlivych kategoriich
         {
             Console.WriteLine($"Pocet jidel s masem: {jidelnicek.Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept s masem"])
                                                                 .Select(x => x).Count()}");
@@ -126,7 +126,7 @@ namespace ProjektJidelnicek
         }
 
         public static void VypisZeleninuVJidelnicku()
-        // Vypise druhy zeleniny obsazene v jidlech
+        // Metoda vypise druhy zeleniny obsazene v jidlech
         {
             string druhyZeleniny = String.Join(", ", jidelnicek.SelectMany(x => x.SamotneJidlo.SeznamSurovin.Where(x => x.Kategorie == 4)).Select(x => x.Nazev).Distinct());
             Console.WriteLine($"Jidelnicek obsahuje tyto druhy zeleniny: {druhyZeleniny}");
@@ -134,7 +134,7 @@ namespace ProjektJidelnicek
         }
 
         public static void VypisNakupniSeznam()
-        // Zepta se uzivatele, zda si preje ulozit nakupni seznam
+        // Metoda se zepta uzivatele, zda si preje ulozit nakupni seznam
         // Pokud ano, ulozi do souboru seznam jidel a nakupni seznam
         {
             List<string> text = [];
@@ -199,7 +199,7 @@ namespace ProjektJidelnicek
         }
 
         public static List<string> PrevedJidlaNaJidelnickuNaSeznam()
-        // Metoda vypise jidla na jidelnicku
+        // Metoda prevede nazvy jidel na jidelnicku na seznam
         {
             List<string> text = [];
             foreach (Jidlo jidlo in jidelnicek)
