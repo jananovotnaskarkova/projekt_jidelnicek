@@ -46,14 +46,16 @@ namespace ProjektJidelnicek
         {
             { "vyhledat podle nazvu", 1 },
             { "vyhledat podle surovin", 2 },
-            { "vyhledat podle kategorie", 3},
+            { "vyhledat podle kategorie", 3 },
+            { "vypsat vsechny", 4 },
         };
 
         // Kategorie vyhledavani
         private static Kategorie kategorieVyhledavani = new Kategorie(slovnikVyhledavani);
 
         // Cesta k souboru se seznamem receptu
-        private static string soubor = @"C:\C_Sharp\czechitas_jaro_25\projekt_jidelnicek\ProjektJidelnicek\seznam";
+        private static string cestaKProjektu = Directory.GetCurrentDirectory();
+        private static string soubor = cestaKProjektu.Replace("\\bin\\Debug\\net9.0", "\\seznam");
 
         public static string oddelovac = "------------------------------------------------------";
 
@@ -208,6 +210,9 @@ namespace ProjektJidelnicek
                     kategorieRecept.VypisKategorie();
                     int cislo = kategorieRecept.NactiCisloKategorie();
                     VypisRecepty(vsechno.Where(x => x.Kategorie == cislo).Select(x => x).ToList());
+                    break;
+                case 4:
+                    VypisRecepty(vsechno);
                     break;
             }
         }
