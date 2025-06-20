@@ -8,8 +8,13 @@ namespace ProjektJidelnicek
             Slovnik = slovnik;
         }
 
+        /// <summary>
+        /// Metoda pro nacteni cisla kategorie.
+        /// </summary>
+        /// <returns>
+        /// cislo kategorie
+        /// </returns>
         public int NactiCisloKategorie()
-        // Metoda pro nacteni cisla kategorie
         {
             bool platnyVstup = false;
             int cisloKategorie = 0;
@@ -35,8 +40,10 @@ namespace ProjektJidelnicek
             return cisloKategorie;
         }
 
+        /// <summary>
+        /// Metoda vypise kategorie ve forme menu (cislo: nazev kategorie).
+        /// </summary>
         public void VypisKategorie()
-        // Metoda vypise kategorie ve forme menu (cislo: nazev kategorie)
         {
             Console.WriteLine("Napiste cislo pro jednu z nasledujich moznosti:");
             string vystup = "";

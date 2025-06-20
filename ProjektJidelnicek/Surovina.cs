@@ -34,28 +34,45 @@ namespace ProjektJidelnicek
 
         public static string oddelovac = "------------------------------------------------------";
 
+        /// <summary>
+        /// Metoda zjisti, jestli uz je surovina ulozena v seznamu.
+        /// </summary>
+        /// <param name="surovina"></param>
+        /// <returns>
+        /// true nebo false pokud je resp. neni surovina v seznamu
+        /// </returns>
         public static bool ZjistiJestliJeSurovinaVSeznamu(string surovina)
-        // Metoda zjisti, jestli uz je surovina ulozena v seznamu
         {
             return vsechno.Any(x => x.Nazev == surovina);
         }
 
+        /// <summary>
+        /// Metoda zjisti, do jake kategorie surovina patri.
+        /// </summary>
+        /// <param name="surovina"></param>
+        /// <returns>
+        /// cislo kategorie dane suroviny
+        /// </returns>
         public static int ZjistiCisloKategorie(string surovina)
-        // Metoda zjisti, do jake kategorie surovina patri
         {
             return vsechno.Where(x => x.Nazev == surovina).Select(x => x.Kategorie).ToList()[0];
         }
 
+        /// <summary>
+        /// Metoda vypise suroviny dle kategorie.
+        /// </summary>
         public static void VypisSurovinyDleKategorie()
-        // Metoda vypise suroviny dle kategorie
         {
             kategorieSurovina.VypisKategorie();
             int cislo = kategorieSurovina.NactiCisloKategorie();
             VypisSuroviny(vsechno.Where(x => x.Kategorie == cislo).Select(x => x).ToList());
         }
 
+        /// <summary>
+        /// Metoda vypise nazvy surovin na zadanem seznamu.
+        /// </summary>
+        /// <param name="seznam"></param>
         public static void VypisSuroviny(List<Surovina> seznam)
-        // Metoda vypise nazvy surovin na zadanem seznamu
         {
             Console.WriteLine(oddelovac);
             if (seznam.Count == 0)
@@ -70,9 +87,15 @@ namespace ProjektJidelnicek
             Console.WriteLine(oddelovac);
         }
 
+        /// <summary>
+        /// Metoda prevede retezec obsahujici udaje o surovinach na seznam surovin.
+        /// Ulozi surovinu na seznam vsech surovin, pokud tam jeste surovina neni.
+        /// </summary>
+        /// <param name="retezec"></param>
+        /// <returns>
+        /// seznam surovin
+        /// </returns>
         public static List<Surovina> PrevedRetezecNaSuroviny(string retezec)
-        // Metoda prevede retezec obsahujici udaje o surovinach na seznam surovin
-        // Ulozi surovinu na seznam vsech surovin, pokud tam jeste surovina neni
         {
             string[] suroviny = retezec.Split(',');
             List<Surovina> seznamSurovin = [];
@@ -91,10 +114,16 @@ namespace ProjektJidelnicek
             return seznamSurovin;
         }
 
+        /// <summary>
+        /// Metoda roztridi suroviny u zadaneho receptu.
+        /// Pokud uz je surovina na seznamu vsech surovin, tak najde cislo kategorie.
+        /// Pokud surovina jeste neni na seznamu vsech surovin, tak se uzivatele zepta, do jake kategorie patri.
+        /// </summary>
+        /// <param name="suroviny"></param>
+        /// <returns>
+        /// seznam surovin
+        /// </returns>
         public static List<Surovina> RoztridSuroviny(List<string> suroviny)
-        // Metoda roztridi suroviny u zadaneho receptu
-        // Pokud uz je surovina na seznamu vsech surovin, tak najde cislo kategorie
-        // Pokud surovina jeste neni na seznamu vsech surovin, tak se uzivatele zepta, do jake kategorie patri
         {
             List<Surovina> seznamSurovin = [];
 

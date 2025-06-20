@@ -59,8 +59,10 @@ namespace ProjektJidelnicek
 
         public static string oddelovac = "------------------------------------------------------";
 
+        /// <summary>
+        /// Metoda nacte recepty ulozene v souboru.
+        /// </summary>
         public static void NactiReceptyZeSouboru()
-        // Metoda nacte recepty ulozene v souboru
         {
             string[] obsahSouboru = File.ReadAllLines(soubor);
             foreach (string radek in obsahSouboru)
@@ -77,8 +79,14 @@ namespace ProjektJidelnicek
             }
         }
 
+        /// <summary>
+        /// Metoda zkontroluje vstup (nazev receptu a suroviny).
+        /// </summary>
+        /// <param name="vstup"></param>
+        /// <returns>
+        /// true nebo false pokud je resp. neni recept platny, nazev receptu, seznam surovin
+        /// </returns>
         public static (bool JePlatny, string nazevReceptu, List<string> seznamSurovin) ZkontrolujVstup(string vstup)
-        //Metoda zkontroluje vstup
         {
             bool jePlatny = false;
             string[] rozdelenyVstup = vstup.Split(',');
@@ -95,9 +103,11 @@ namespace ProjektJidelnicek
             return (jePlatny, rozdelenyVstup[0], seznamSurovin);
         }
 
+        /// <summary>
+        /// Metoda se zepta na nazev receptu a suroviny.
+        /// Dale zjisti do jake kategorie recept patri, jestli ma prilohu a roztridi suroviny do kategorii.
+        /// </summary>
         public static void PridejRecept()
-        // Metoda se zepta na nazev receptu a suroviny
-        // Dale zjisti do jake kategorie recept patri, jestli ma prilohu a roztridi suroviny do kategorii
         {
             Console.WriteLine("Zadejte novy recept ve formatu: 'nazev,surovina1,surovina2,surovina3,surovina4,surovina5'");
             string vstup = Console.ReadLine();
@@ -140,8 +150,11 @@ namespace ProjektJidelnicek
             Console.WriteLine($"Recept '{nazevReceptu}' byl pridan");
         }
 
+        /// <summary>
+        /// Metoda vypise nazvy receptu na zadanem seznamu.
+        /// </summary>
+        /// <param name="seznam"></param>
         public static void VypisRecepty(List<Recept> seznam)
-        // Metoda vypise nazvy receptu na zadanem seznamu
         {
             Console.WriteLine(oddelovac);
             if (seznam.Count == 0)
@@ -155,34 +168,46 @@ namespace ProjektJidelnicek
             Console.WriteLine(oddelovac);
         }
 
+        /// <summary>
+        /// Metoda prevede recept na retezec.
+        /// </summary>
+        /// <param name="recept"></param>
+        /// <returns>
+        /// retezec obsahujici vsechny informace z receptu
+        /// </returns>
         public static string PrevedReceptNaRetezec(Recept recept)
-        // Metoda prevede recept na retezec
         {
             var surovinyPole = recept.SeznamSurovin.Select(x => String.Join('-', x.Nazev, x.Kategorie));
             var surovinyRetezec = String.Join(',', surovinyPole);
             return String.Join('|', recept.Nazev, recept.Kategorie, recept.MaPrilohu, surovinyRetezec);
         }
 
+        /// <summary>
+        /// Metoda zjisti, jestli uz je recept ulozeny v seznamu.
+        /// </summary>
+        /// <param name="nazevReceptu"></param>
+        /// <returns>
+        /// true nebo false pokud je resp. neni recept v seznamu
+        /// </returns>
         public static bool ZjistiJestliJeReceptVSeznamu(string nazevReceptu)
-        // Metoda zjisti, jestli uz je recept ulozeny v seznamu
         {
             return vsechno.Any(x => x.Nazev == nazevReceptu);
         }
 
-        public static Recept NajdiRecept(string nazevReceptu)
-        // Metoda vrati recept s danym nazvem
-        {
-            return vsechno.Where(x => x.Nazev == nazevReceptu).Select(x => x).ToList()[0];
-        }
-
+        /// <summary>
+        /// Metoda najde recept v seznamu podle nazvu.
+        /// </summary>
+        /// <param name="nazevReceptu"></param>
+        /// <returns></returns>
         public static Recept NajdiReceptDleNazvu(string nazevReceptu)
-        // Metoda najde recept v seznamu podle nazvu
         {
             return vsechno.Where(x => x.Nazev == nazevReceptu).Select(x => x).ToList()[0];
         }
 
+        /// <summary>
+        /// Metoda vyhleda recept podle nazvu, surovin, nebo kategorie.
+        /// </summary>
         public static void VyhledejRecept()
-        // Metoda vyhleda recept podle nazvu, surovin, nebo kategorie
         {
             Console.WriteLine("Podle ceho chcete recepty vyhledat?");
             kategorieVyhledavani.VypisKategorie();
@@ -217,9 +242,11 @@ namespace ProjektJidelnicek
             }
         }
 
+        /// <summary>
+        /// Metoda smaze recept ze seznamu receptu.
+        /// Po smazani receptu aktualizuje soubor s recepty i seznam surovin.
+        /// </summary>
         public static void SmazRecept()
-        // Metoda smaze recept ze seznamu receptu
-        // Po smazani receptu aktualizuje soubor s recepty i seznam surovin
         {
             Console.WriteLine("Zadejte nazev receptu, ktery chcete smazat. Muzete vybirat z techto moznosti:");
             Recept.VypisRecepty(Recept.vsechno);
@@ -259,8 +286,10 @@ namespace ProjektJidelnicek
             Console.WriteLine($"Recept '{receptKeSmazani.Nazev}' byl smazan");
         }
 
+        /// <summary>
+        /// Metoda vypise suroviny u receptu.
+        /// </summary>
         public static void VypisSurovinyUReceptu()
-        // Metoda vypise suroviny u receptu
         {
             Console.WriteLine("Zadejte nazev receptu, u ktereho chcete vypsat suroviny:");
             string vstup = Console.ReadLine();
