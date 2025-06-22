@@ -221,7 +221,7 @@ namespace ProjektJidelnicek
             Console.WriteLine("Podle ceho chcete recepty vyhledat?");
             kategorieVyhledavani.VypisKategorie();
             int vyhledavani = kategorieVyhledavani.NactiCisloKategorie();
-            string? vstup;
+            string vstup;
 
             switch (vyhledavani)
             {
