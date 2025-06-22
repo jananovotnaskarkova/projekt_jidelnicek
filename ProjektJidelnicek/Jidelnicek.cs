@@ -39,7 +39,7 @@ namespace ProjektJidelnicek
         {
             Console.WriteLine("Zadejte nazev jidla, ktere chcete pridat. Muzete vybirat z techto moznosti:");
             Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie != 4).Select(x => x).ToList());
-            string vstup = Console.ReadLine();
+            string vstup = Recept.NactiVstup();
 
             if (!Recept.ZjistiJestliJeReceptVSeznamu(vstup))
             {
@@ -53,7 +53,7 @@ namespace ProjektJidelnicek
             {
                 Console.WriteLine("Zadejte nazev prilohy, muzete vybirat z techto moznosti:");
                 Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie == 4).Select(x => x).ToList());
-                string vstupPriloha = Console.ReadLine();
+                string vstupPriloha = Recept.NactiVstup();
 
                 if (!Recept.ZjistiJestliJeReceptVSeznamu(vstupPriloha))
                 {
@@ -90,7 +90,7 @@ namespace ProjektJidelnicek
 
             Console.WriteLine("Zadejte nazev jidla, ktere chcete smazat. Muzete vybirat z techto moznosti:");
             VypisJidlaNaJidelnicku();
-            string vstup = Console.ReadLine();
+            string vstup = Recept.NactiVstup();
 
             if (!ZjistiJestliJeJidloVJidelnicku(vstup))
             {

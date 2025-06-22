@@ -1,3 +1,5 @@
+using System.Data;
+
 namespace ProjektJidelnicek
 {
     public class Recept
@@ -92,6 +94,11 @@ namespace ProjektJidelnicek
             string[] rozdelenyVstup = vstup.Split(',');
             List<string> seznamSurovin = [];
 
+            if (rozdelenyVstup.Any(x => x == ""))
+            {
+                return (jePlatny, rozdelenyVstup[0], seznamSurovin);
+            }
+
             if (rozdelenyVstup.Length >= 2)
             {
                 foreach (string s in rozdelenyVstup.TakeLast(rozdelenyVstup.Length - 1).ToList())
@@ -110,7 +117,7 @@ namespace ProjektJidelnicek
         public static void PridejRecept()
         {
             Console.WriteLine("Zadejte novy recept ve formatu: 'nazev,surovina1,surovina2,surovina3,surovina4,surovina5'");
-            string vstup = Console.ReadLine();
+            string vstup = NactiVstup();
             bool maPrilohu;
 
             (bool JePlatny, string nazevReceptu, List<string> suroviny) = ZkontrolujVstup(vstup);
@@ -198,7 +205,9 @@ namespace ProjektJidelnicek
         /// Metoda najde recept v seznamu podle nazvu.
         /// </summary>
         /// <param name="nazevReceptu"></param>
-        /// <returns></returns>
+        /// <returns>
+        /// recept s danym nazvem
+        /// </returns>
         public static Recept NajdiReceptDleNazvu(string nazevReceptu)
         {
             return vsechno.Where(x => x.Nazev == nazevReceptu).Select(x => x).ToList()[0];
@@ -212,18 +221,18 @@ namespace ProjektJidelnicek
             Console.WriteLine("Podle ceho chcete recepty vyhledat?");
             kategorieVyhledavani.VypisKategorie();
             int vyhledavani = kategorieVyhledavani.NactiCisloKategorie();
-            string vstup;
+            string? vstup;
 
             switch (vyhledavani)
             {
                 case 1:
                     Console.WriteLine("Zadejte cast nazvu receptu pro vyhledavani:");
-                    vstup = Console.ReadLine();
+                    vstup = NactiVstup();
                     VypisRecepty(vsechno.Where(x => x.Nazev.Contains(vstup)).Select(x => x).ToList());
                     break;
                 case 2:
                     Console.WriteLine("Zadejte surovinu pro vyhledavani:");
-                    vstup = Console.ReadLine();
+                    vstup = NactiVstup();
                     string surovinyDleVstupu = String.Join(", ", Surovina.vsechno.Where(x => x.Nazev.Contains(vstup)).Select(x => x.Nazev).ToList());
                     if (surovinyDleVstupu.Length != 0)
                     {
@@ -250,7 +259,7 @@ namespace ProjektJidelnicek
         {
             Console.WriteLine("Zadejte nazev receptu, ktery chcete smazat. Muzete vybirat z techto moznosti:");
             Recept.VypisRecepty(Recept.vsechno);
-            string vstup = Console.ReadLine();
+            string vstup = NactiVstup();
             Recept receptKeSmazani;
 
             bool JeVSeznamu = ZjistiJestliJeReceptVSeznamu(vstup);
@@ -292,7 +301,7 @@ namespace ProjektJidelnicek
         public static void VypisSurovinyUReceptu()
         {
             Console.WriteLine("Zadejte nazev receptu, u ktereho chcete vypsat suroviny:");
-            string vstup = Console.ReadLine();
+            string vstup = NactiVstup();
             Recept recept;
 
             if (!ZjistiJestliJeReceptVSeznamu(vstup))
@@ -303,6 +312,32 @@ namespace ProjektJidelnicek
 
             recept = NajdiReceptDleNazvu(vstup);
             Surovina.VypisSuroviny(recept.SeznamSurovin);
+        }
+
+        /// <summary>
+        /// Metoda kontroluje, ze je zadany vstup neprazdny.
+        /// </summary>
+        /// <returns>
+        /// zadany neprazdny retezec
+        /// </returns>
+        public static string NactiVstup()
+        {
+            bool jePlatny = false;
+            string? vstup = "";
+
+            while (!jePlatny)
+            {
+                vstup = Console.ReadLine();
+                if (vstup == "")
+                {
+                    Console.WriteLine("Neplatny vstup");
+                }
+                else
+                {
+                    jePlatny = true;
+                }
+            }
+            return vstup;
         }
     }
 }
