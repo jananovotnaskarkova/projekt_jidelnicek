@@ -48,21 +48,27 @@ namespace ProjektJidelnicek
             }
 
             Recept noveJidlo = Recept.NajdiReceptDleNazvu(vstup);
+
             if (noveJidlo.MaPrilohu)
             {
                 Console.WriteLine("Zadejte nazev prilohy, muzete vybirat z techto moznosti:");
                 Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie == 4).Select(x => x).ToList());
                 string vstupPriloha = Recept.NactiVstup();
+
                 if (!Recept.ZjistiJestliJeReceptVSeznamu(vstupPriloha))
                 {
                     Console.WriteLine("Neznama priloha, jidlo s prilohou nebylo pridano");
                     return;
                 }
+
                 if (Recept.NajdiReceptDleNazvu(vstupPriloha).Kategorie != 4)
                 {
                     Console.WriteLine("Neznama priloha, jidlo s prilohou nebylo pridano");
                     return;
                 }
+
+                jidelnicek.Add(new Jidlo(noveJidlo, Recept.NajdiReceptDleNazvu(vstupPriloha)));
+                Console.WriteLine($"Jidlo '{noveJidlo.Nazev}' bylo pridano do jidelnicku");
             }
             else
             {
