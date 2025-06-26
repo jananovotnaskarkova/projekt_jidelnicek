@@ -2,7 +2,7 @@ namespace ProjektJidelnicek
 {
     public class Kategorie
     {
-        public Dictionary<string, int> Slovnik {get; }
+        public Dictionary<string, int> Slovnik { get; }
         public Kategorie(Dictionary<string, int> slovnik)
         {
             Slovnik = slovnik;
@@ -16,16 +16,13 @@ namespace ProjektJidelnicek
         /// </returns>
         public int NactiCisloKategorie()
         {
-            bool platnyVstup = false;
-            int cisloKategorie = 0;
-
-            while (!platnyVstup)
+            while (true)
             {
-                if (int.TryParse(Console.ReadLine(), out cisloKategorie))
+                if (int.TryParse(Console.ReadLine(), out var cisloKategorie))
                 {
                     if ((cisloKategorie > 0) && (cisloKategorie <= Slovnik.Count))
                     {
-                        platnyVstup = true;
+                        return cisloKategorie;
                     }
                     else
                     {
@@ -37,7 +34,6 @@ namespace ProjektJidelnicek
                     Console.WriteLine("Neplatne cislo kategorie");
                 }
             }
-            return cisloKategorie;
         }
 
         /// <summary>
@@ -46,11 +42,7 @@ namespace ProjektJidelnicek
         public void VypisKategorie()
         {
             Console.WriteLine("Napiste cislo pro jednu z nasledujich moznosti:");
-            string vystup = "";
-            foreach (var s in Slovnik)
-            {
-                vystup = string.Join(", ", Slovnik.Select(s => s.Value + ": " + s.Key));
-            }
+            string vystup = string.Join(", ", Slovnik.Select(s => s.Value + ": " + s.Key));
             Console.WriteLine(vystup);
         }
     }

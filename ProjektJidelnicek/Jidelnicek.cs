@@ -1,5 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
-
 namespace ProjektJidelnicek
 {
     public class Jidlo
@@ -15,10 +13,12 @@ namespace ProjektJidelnicek
             SamotneJidlo = samotneJidlo;
             Priloha = priloha;
         }
-        public static List<Jidlo> jidelnicek = [];
+        public static List<Jidlo> jidelnicek = []; // Typicky vsechny public fieldy zapisujeme v PascalCase
 
+        // Oddelovac by mohl sedet v nejake pomocne staticke tride, at si ho nemusime definovat vicekrat
         public static string oddelovac = "------------------------------------------------------";
 
+        // Tady taky dynamickou cestu
         private static string nakupnimSeznamSoubor = @"C:\C_Sharp\czechitas_jaro_25\projekt_jidelnicek\ProjektJidelnicek\nakupni_seznam";
 
         // Slovnik obsahujici kategorie pro nakupni sezanm
@@ -38,7 +38,7 @@ namespace ProjektJidelnicek
         public static void PridejJidlo()
         {
             Console.WriteLine("Zadejte nazev jidla, ktere chcete pridat. Muzete vybirat z techto moznosti:");
-            Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie != 4).Select(x => x).ToList());
+            Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie != 4).Select(x => x).ToList()); // Proc zrovna 4?
             string vstup = Recept.NactiVstup();
 
             if (!Recept.ZjistiJestliJeReceptVSeznamu(vstup))
@@ -128,8 +128,10 @@ namespace ProjektJidelnicek
         /// </summary>
         public static void VypisPocetJidelDleKategorii()
         {
-            Console.WriteLine($"Pocet jidel s masem: {jidelnicek.Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept s masem"])
-                                                                .Select(x => x).Count()}");
+            var pocetJidelSMasem = jidelnicek
+                .Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept s masem"])
+                .Count();
+            Console.WriteLine($"Pocet jidel s masem: {pocetJidelSMasem}");
             Console.WriteLine($"Pocet jidel bez masa: {jidelnicek.Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept bez masa"])
                                                                  .Select(x => x).Count()}");
             Console.WriteLine($"Pocet sladkych jidel: {jidelnicek.Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept na sladke jidlo"])
@@ -173,12 +175,12 @@ namespace ProjektJidelnicek
             Console.WriteLine("Prejete si ulozit nakupni seznam do souboru?");
             kategorieNakupniSeznam.VypisKategorie();
             int ulozitNakupniSeznamCislo = kategorieNakupniSeznam.NactiCisloKategorie();
-            bool ulozitNakupniSeznam = ulozitNakupniSeznamCislo.Equals(1);
+            bool ulozitNakupniSeznam = ulozitNakupniSeznamCislo == 1;
 
             if (ulozitNakupniSeznam)
             {
                 File.WriteAllLines(nakupnimSeznamSoubor, PrevedJidlaNaJidelnickuNaSeznam());
-                File.AppendAllLines(nakupnimSeznamSoubor, [oddelovac]);
+                File.AppendAllText(nakupnimSeznamSoubor, oddelovac);
 
                 foreach (Jidlo jidlo in jidelnicek)
                 {
@@ -223,7 +225,6 @@ namespace ProjektJidelnicek
         /// seznam jidel na jidelnicku
         /// </returns>
         public static List<string> PrevedJidlaNaJidelnickuNaSeznam()
-       
         {
             List<string> text = [];
             foreach (Jidlo jidlo in jidelnicek)
@@ -261,7 +262,7 @@ namespace ProjektJidelnicek
         /// </returns>
         public static Jidlo NajdiJidloDleNazvu(string nazevJidla)
         {
-            return jidelnicek.Where(x => x.SamotneJidlo.Nazev == nazevJidla).Select(x => x).ToList()[0];
+            return jidelnicek.Where(x => x.SamotneJidlo.Nazev == nazevJidla).First();
         }
 
         /// <summary>
