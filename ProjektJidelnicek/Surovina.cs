@@ -55,7 +55,7 @@ namespace ProjektJidelnicek
         /// </returns>
         public static int ZjistiCisloKategorie(string surovina)
         {
-            return vsechno.Where(x => x.Nazev == surovina).Select(x => x.Kategorie).ToList()[0];
+            return vsechno.Where(x => x.Nazev == surovina).Select(x => x.Kategorie).First();
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace ProjektJidelnicek
         {
             kategorieSurovina.VypisKategorie();
             int cislo = kategorieSurovina.NactiCisloKategorie();
-            VypisSuroviny(vsechno.Where(x => x.Kategorie == cislo).Select(x => x).ToList());
+            VypisSuroviny(vsechno.Where(x => x.Kategorie == cislo).ToList());
         }
 
         /// <summary>
