@@ -31,13 +31,15 @@ namespace ProjektJidelnicek
         // Kategorie pro nakupni seznam
         public static Kategorie kategorieNakupniSeznam = new Kategorie(slovnikNakupniSeznam);
 
+        /// <summary>
+        /// Metoda se zepta na nazev jidla a prida ho do jidelnicku.
+        /// Pokud ma jidlo prilohu, zepta se i na ni a prida ji.
+        /// </summary>
         public static void PridejJidlo()
-        // Metoda se zepta na nazev jidla a prida ho do jidelnicku
-        // Pokud ma jidlo prilohu, zepta se i na ni a prida ji
         {
             Console.WriteLine("Zadejte nazev jidla, ktere chcete pridat. Muzete vybirat z techto moznosti:");
             Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie != 4).Select(x => x).ToList()); // Proc zrovna 4?
-            string vstup = Console.ReadLine();
+            string vstup = Recept.NactiVstup();
 
             if (!Recept.ZjistiJestliJeReceptVSeznamu(vstup))
             {
@@ -50,13 +52,13 @@ namespace ProjektJidelnicek
             {
                 Console.WriteLine("Zadejte nazev prilohy, muzete vybirat z techto moznosti:");
                 Recept.VypisRecepty(Recept.vsechno.Where(x => x.Kategorie == 4).Select(x => x).ToList());
-                string vstupPriloha = Console.ReadLine();
-                if (Recept.NajdiReceptDleNazvu(vstupPriloha).Kategorie == 4)
+                string vstupPriloha = Recept.NactiVstup();
+                if (!Recept.ZjistiJestliJeReceptVSeznamu(vstupPriloha))
                 {
-                    jidelnicek.Add(new Jidlo(noveJidlo, Recept.NajdiReceptDleNazvu(vstupPriloha)));
-                    Console.WriteLine($"Jidlo '{noveJidlo.Nazev}' bylo pridano do jidelnicku");
+                    Console.WriteLine("Neznama priloha, jidlo s prilohou nebylo pridano");
+                    return;
                 }
-                else
+                if (Recept.NajdiReceptDleNazvu(vstupPriloha).Kategorie != 4)
                 {
                     Console.WriteLine("Neznama priloha, jidlo s prilohou nebylo pridano");
                     return;
@@ -69,8 +71,10 @@ namespace ProjektJidelnicek
             }
         }
 
+        /// <summary>
+        /// Metoda se zepta na nazev jidla a smaze ho z jidelnicku.
+        /// </summary>
         public static void SmazJidlo()
-        // Metoda se zepta na nazev jidla a smaze ho z jidelnicku
         {
             if (jidelnicek.Count == 0)
             {
@@ -80,7 +84,7 @@ namespace ProjektJidelnicek
 
             Console.WriteLine("Zadejte nazev jidla, ktere chcete smazat. Muzete vybirat z techto moznosti:");
             VypisJidlaNaJidelnicku();
-            string vstup = Console.ReadLine();
+            string vstup = Recept.NactiVstup();
 
             if (!ZjistiJestliJeJidloVJidelnicku(vstup))
             {
@@ -93,8 +97,10 @@ namespace ProjektJidelnicek
             Console.WriteLine($"Jidlo '{jidloKeSmazani.SamotneJidlo.Nazev}' bylo smazano z jidelnicku");
         }
 
+        /// <summary>
+        /// Metoda vypise jidla na jidelnicku.
+        /// </summary>
         public static void VypisJidlaNaJidelnicku()
-        // Metoda vypise jidla na jidelnicku
         {
             Console.WriteLine(oddelovac);
             foreach (Jidlo jidlo in jidelnicek)
@@ -111,8 +117,10 @@ namespace ProjektJidelnicek
             Console.WriteLine(oddelovac);
         }
 
+        /// <summary>
+        /// Metoda vypise pocet jidel v jednotlivych kategoriich.
+        /// </summary>
         public static void VypisPocetJidelDleKategorii()
-        // Metoda vypise pocet jidel v jednotlivych kategoriich
         {
             var pocetJidelSMasem = jidelnicek
                 .Where(x => x.SamotneJidlo.Kategorie == Recept.kategorieRecept.Slovnik["recept s masem"])
@@ -127,17 +135,21 @@ namespace ProjektJidelnicek
             Console.WriteLine(oddelovac);
         }
 
+        /// <summary>
+        /// Metoda vypise druhy zeleniny obsazene v jidlech na jidelnicku.
+        /// </summary>
         public static void VypisZeleninuVJidelnicku()
-        // Metoda vypise druhy zeleniny obsazene v jidlech
         {
             string druhyZeleniny = String.Join(", ", jidelnicek.SelectMany(x => x.SamotneJidlo.SeznamSurovin.Where(x => x.Kategorie == 4)).Select(x => x.Nazev).Distinct());
             Console.WriteLine($"Jidelnicek obsahuje tyto druhy zeleniny: {druhyZeleniny}");
             Console.WriteLine(oddelovac);
         }
 
+        /// <summary>
+        /// Metoda se zepta uzivatele, zda si preje ulozit nakupni seznam.
+        /// Pokud ano, ulozi do souboru seznam jidel a nakupni seznam.
+        /// </summary>
         public static void VypisNakupniSeznam()
-        // Metoda se zepta uzivatele, zda si preje ulozit nakupni seznam
-        // Pokud ano, ulozi do souboru seznam jidel a nakupni seznam
         {
             List<string> text = [];
             Dictionary<int, List<string>> nakupniSeznam = new Dictionary<int, List<string>>
@@ -200,8 +212,13 @@ namespace ProjektJidelnicek
             }
         }
 
+        /// <summary>
+        /// Metoda prevede nazvy jidel na jidelnicku na seznam.
+        /// </summary>
+        /// <returns>
+        /// seznam jidel na jidelnicku
+        /// </returns>
         public static List<string> PrevedJidlaNaJidelnickuNaSeznam()
-        // Metoda prevede nazvy jidel na jidelnicku na seznam
         {
             List<string> text = [];
             foreach (Jidlo jidlo in jidelnicek)
@@ -218,22 +235,35 @@ namespace ProjektJidelnicek
             return text;
         }
 
+        /// <summary>
+        /// Metoda zjisti, jestli uz je jidlo ulozene v jidelnicku.
+        /// </summary>
+        /// <param name="nazev">nazev jidla pro vyhledani</param>
+        /// <returns>
+        /// true nebo false pokud je resp. neni jidlo v jidelnicku
+        /// </returns>
         public static bool ZjistiJestliJeJidloVJidelnicku(string nazev)
-        // Metoda zjisti, jestli uz je jidlo ulozene v jidelnicku
         {
             return jidelnicek.Any(x => x.SamotneJidlo.Nazev == nazev);
         }
 
+        /// <summary>
+        /// Metoda najde jidlo v jidelnicku podle nazvu.
+        /// </summary>
+        /// <param name="nazevJidla">nazev jidla pro hledani</param>
+        /// <returns>
+        /// jidlo z jidelnicku s danym nazvem
+        /// </returns>
         public static Jidlo NajdiJidloDleNazvu(string nazevJidla)
-        // Metoda najde jidlo v seznamu podle nazvu
         {
             return jidelnicek.Where(x => x.SamotneJidlo.Nazev == nazevJidla).First();
         }
 
+        /// <summary>
+        /// Metoda vypise informace o jidelnicku.
+        /// </summary>
         public static void VypisInfo()
-        // Metoda vypise informace o jidelnicku
         {
-            // Vypise seznam jidel
             if (jidelnicek.Count == 0)
             {
                 Console.WriteLine("Jidelnicek neobsahuje zadna jidla");
